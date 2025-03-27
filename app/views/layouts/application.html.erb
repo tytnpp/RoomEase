@@ -1,3 +1,33 @@
+<!--<!DOCTYPE html>
+<html>
+<head>
+  <title>Office Room Reservation</title>
+  <%#= csrf_meta_tags %>-->
+  <%#= csp_meta_tag %>
+  <%#= stylesheet_link_tag 'application', media: 'all' %>
+  <%#= javascript_include_tag 'application' %>
+<!--</head>
+<body>
+  <nav>
+    <%#= link_to 'Home', root_path %>-->
+    <%#= link_to 'Rooms', rooms_path %>
+    <%# if user_signed_in? %>
+      <%#= link_to 'Logout', destroy_user_session_path, method: :delete %>
+<!--      -->
+      <%#= form_with url: destroy_user_session_path, method: :delete do %>
+      <%#= submit_tag 'Logout' %>
+      <%# end %>
+    <%# else %>
+      <%#= link_to 'Login', new_user_session_path %>
+      <%#= link_to 'Sign up', new_user_registration_path %>
+    <%# end %>
+<!--  </nav>
+
+  <%#= yield %>-->
+<!--</body>
+</html>
+-->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,17 +38,33 @@
   <%= javascript_include_tag 'application' %>
 </head>
 <body>
+  <!-- Navigation Bar -->
   <nav>
-    <%= link_to 'Home', root_path %>
-    <%= link_to 'Rooms', rooms_path %>
     <% if user_signed_in? %>
-      <%= link_to 'Logout', destroy_user_session_path, method: :delete %>
+      <%= form_with url: destroy_user_session_path, method: :delete do %>
+        <%= submit_tag 'Logout' %>
+      <% end %>
     <% else %>
       <%= link_to 'Login', new_user_session_path %>
-      <%= link_to 'Sign up', new_user_registration_path %>
     <% end %>
   </nav>
 
-  <%= yield %>
+  <div class="container">
+    <!-- Sidebar -->
+    <% if user_signed_in? %>
+      <aside class="sidebar">
+        <ul>
+          <li><%= link_to 'Rooms', rooms_path %></li>
+          <li><%= link_to 'Activity', activity_path %></li>
+          <li><%= link_to 'Profile', profile_path %></li>
+        </ul>
+      </aside>
+    <% end %>
+
+    <!-- Main Content -->
+    <main class="content">
+      <%= yield %>
+    </main>
+  </div>
 </body>
 </html>
