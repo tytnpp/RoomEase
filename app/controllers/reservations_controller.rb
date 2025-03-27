@@ -1,6 +1,8 @@
 class ReservationsController < ApplicationController
   before_action :set_room, only: [:new, :create]
   before_action :set_reservation, only: [:show, :destroy]
+  before_action :authenticate_user!, only: [:activity]
+  before_action :activity, only: [:activity]
 
   def new
     @reservation = @room.reservations.build
@@ -37,5 +39,26 @@ class ReservationsController < ApplicationController
 
   def reservation_params
     params.require(:reservation).permit(:start_time, :end_time)
+  end
+
+  def activity
+    # Current reservations (reservations that are active right now)
+    @current_reservations = current_user.reservations.where("start_time <= ? AND end_time >= ?", Time.current, Time.current) || []
+
+    # Reservation history (reservations that have already ended)
+    @past_reservations = current_user.reservations.where("end_time < ?", Time.current).order(end_time: :desc) || []
+  end
+
+  def edit
+    @reservation = Reservation.find(params[:id])
+  end
+  
+  def update
+    @reservation = Reservation.find(params[:id])
+    if @reservation.update(reservation_params)
+      redirect_to activity_path, notice: "Reservation updated successfully."
+    else
+      render :edit
+    end
   end
 end
