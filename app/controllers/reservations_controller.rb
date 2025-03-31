@@ -11,9 +11,9 @@ class ReservationsController < ApplicationController
   def create
     @reservation = @room.reservations.build(reservation_params)
     @reservation.user = current_user
-
+  
     if @reservation.save
-      redirect_to @reservation, notice: "Reservation created successfully."
+      redirect_to rooms_path, notice: "Reservation created successfully."
     else
       render :new
     end
@@ -43,10 +43,10 @@ class ReservationsController < ApplicationController
 
   def activity
     # Current reservations (reservations that are active right now)
-    @current_reservations = current_user.reservations.where("start_time <= ? AND end_time >= ?", Time.current, Time.current) || []
-
+    @current_reservations = current_user.reservations.where("start_time <= ? AND end_time >= ?", Time.current, Time.current)
+  
     # Reservation history (reservations that have already ended)
-    @past_reservations = current_user.reservations.where("end_time < ?", Time.current).order(end_time: :desc) || []
+    @past_reservations = current_user.reservations.where("end_time < ?", Time.current).order(end_time: :desc)
   end
 
   def edit

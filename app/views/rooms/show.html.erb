@@ -3,3 +3,27 @@
 
 <h2>Make a Reservation</h2>
 <%= link_to 'Reserve this room', new_room_reservation_path(@room) %>
+
+<h2>Time Slots</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Time Slot</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @time_slots.each do |slot| %>
+      <tr>
+        <td><%= slot[:start_time].strftime("%H:%M") %> - <%= slot[:end_time].strftime("%H:%M") %></td>
+        <td>
+          <% if slot[:available] %>
+            <span style="color: green;">Available</span>
+          <% else %>
+            <span style="color: red;">Occupied</span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

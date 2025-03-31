@@ -1,22 +1,21 @@
-<!-- filepath: app/views/reservations/activity.html.erb -->
 <h1>Activity</h1>
 
-<!-- Current Reservations -->
+<!-- Current and Future Reservations -->
 <h2>Current Reservations</h2>
 <% if @current_reservations.any? %>
   <ul>
     <% @current_reservations.each do |reservation| %>
       <li>
         Room: <%= reservation.room.name %><br>
-        Start: <%= reservation.start_time.strftime("%d %b %Y, %I:%M %p") %><br>
-        End: <%= reservation.end_time.strftime("%d %b %Y, %I:%M %p") %><br>
-        <%= link_to 'Edit', edit_reservation_path(reservation), class: 'btn btn-primary' %> |
-        <%= link_to 'Cancel', reservation_path(reservation), method: :delete, data: { confirm: 'Are you sure you want to cancel this reservation?' }, class: 'btn btn-danger' %>
+        Start: <%= reservation.start_time.strftime("%d %B %Y, %H:%M") %><br>
+        End: <%= reservation.end_time.strftime("%d %B %Y, %H:%M") %><br>
+        <%= link_to 'Edit', edit_room_reservation_path(reservation.room, reservation), class: 'btn btn-primary' %> |
+        <%= link_to 'Cancel', room_reservation_path(reservation.room, reservation), method: :delete, data: { confirm: 'Are you sure you want to cancel this reservation?' }, class: 'btn btn-danger' %>
       </li>
     <% end %>
   </ul>
 <% else %>
-  <p>No current reservations.</p>
+  <p>No current or future reservations.</p>
 <% end %>
 
 <!-- Reservation History -->
@@ -26,8 +25,8 @@
     <% @past_reservations.each do |reservation| %>
       <li>
         Room: <%= reservation.room.name %><br>
-        Start: <%= reservation.start_time.strftime("%d %b %Y, %I:%M %p") %><br>
-        End: <%= reservation.end_time.strftime("%d %b %Y, %I:%M %p") %>
+        Start: <%= reservation.start_time.strftime("%d %B %Y, %H:%M") %><br>
+        End: <%= reservation.end_time.strftime("%d %B %Y, %H:%M") %>
       </li>
     <% end %>
   </ul>

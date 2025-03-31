@@ -1,4 +1,16 @@
+<!-- filepath: app/views/reservations/new.html.erb -->
 <h1>Reserve <%= @room.name %></h1>
+
+<% if @reservation.errors.any? %>
+  <div class="errors">
+    <h2><%= pluralize(@reservation.errors.count, "error") %> prohibited this reservation from being saved:</h2>
+    <ul>
+      <% @reservation.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
 
 <%= form_with(model: [@room, @reservation]) do |f| %>
   <div>
