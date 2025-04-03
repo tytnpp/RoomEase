@@ -1,4 +1,4 @@
-class AddDeviseToUsers < ActiveRecord::Migration[8.0]
+class AddDeviseToUsers < ActiveRecord::Migration[7.1]
   def change
     change_table :users do |t|
       ## Database authenticatable
@@ -7,10 +7,10 @@ class AddDeviseToUsers < ActiveRecord::Migration[8.0]
 
       ## Recoverable
       t.string   :reset_password_token
-      t.datetime :reset_password_sent_at
+      t.timestamptz :reset_password_sent_at
 
       ## Rememberable
-      t.datetime :remember_created_at
+      t.timestamptz :remember_created_at
 
       ## Trackable
       # t.integer  :sign_in_count, default: 0, null: false

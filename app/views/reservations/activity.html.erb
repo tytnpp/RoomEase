@@ -25,11 +25,36 @@
     <% @past_reservations.each do |reservation| %>
       <li>
         Room: <%= reservation.room.name %><br>
-        Start: <%= reservation.start_time.strftime("%d %B %Y, %H:%M") %><br>
-        End: <%= reservation.end_time.strftime("%d %B %Y, %H:%M") %>
+        Date: <%= reservation.start_time.strftime("%d %B %Y") %><br>
+        Start: <%= reservation.start_time.strftime("%H:%M") %><br>
+        End: <%= reservation.end_time.strftime("%H:%M") %>
       </li>
     <% end %>
   </ul>
 <% else %>
   <p>No past reservations.</p>
 <% end %>
+
+<!--Pagination Links-->
+<!--<h2>Reservation History</h2>-->
+<%# if @past_reservations.any? %>
+<!--  <ul>-->
+    <%# @past_reservations.each do |reservation| %>
+<!--      <li>
+        Room: <%#= reservation.room.name %><br>
+        Start: <%#= reservation.start_time.strftime("%d %B %Y, %H:%M") %><br>
+        End: <%#= reservation.end_time.strftime("%d %B %Y, %H:%M") %>
+      </li>
+    <%# end %>-->
+<!--  </ul>
+
+  Pagination Links 
+  <div class="pagination">
+    <%#= paginate @past_reservations %>-->
+<!--  </div>-->
+<%# else %>
+<!--  <p>No past reservations.</p>-->
+<%# end %>
+
+<!--Add kaminari pagination with tailwindcss-->
+<!--rails g kaminari:views tailwindcss-->

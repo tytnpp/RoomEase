@@ -1,18 +1,4 @@
-<!-- filepath: app/views/reservations/new.html.erb -->
-<h1>Reserve <%= @room.name %></h1>
-
-<% if @reservation.errors.any? %>
-  <div class="errors">
-    <h2><%= pluralize(@reservation.errors.count, "error") %> prohibited this reservation from being saved:</h2>
-    <ul>
-      <% @reservation.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
-
-<%= form_with(model: [@room, @reservation]) do |f| %>
+<%= form_with(model: [@room, @reservation], local: true) do |f| %>
   <div>
     <%= f.label :start_time, "Start Time" %>
     <%= f.datetime_select :start_time %>
@@ -23,7 +9,42 @@
     <%= f.datetime_select :end_time %>
   </div>
 
-  <%= f.submit "Reserve" %>
+  <%= f.submit "Reserve", class: "btn btn-primary" %>
 <% end %>
 
-<%= link_to 'Back', rooms_path %>
+<!-- Modal for Validation Errors -->
+<div id="errorModal" class="modal hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
+    <h2 class="text-xl font-bold mb-4">Reservation Error</h2>
+    <ul id="errorMessages" class="text-red-500">
+      <% @reservation.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+    <button onclick="closeModal()" class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Close</button>
+  </div>
+</div>
+
+<script>
+  // Show the modal if there are errors
+  document.addEventListener("DOMContentLoaded", () => {
+    const errorModal = document.getElementById("errorModal");
+    const hasErrors = <%= @reservation.errors.any? ? 'true' : 'false' %>;
+
+    if (hasErrors) {
+      errorModal.classList.remove("hidden");
+    }
+  });
+
+  // Close the modal
+  function closeModal() {
+    const errorModal = document.getElementById("errorModal");
+    errorModal.classList.add("hidden");
+  }
+</script>
+
+<style>
+  .hidden {
+    display: none;
+  }
+</style>

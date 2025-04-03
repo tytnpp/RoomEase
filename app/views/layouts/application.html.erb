@@ -41,6 +41,7 @@
   <!-- Navigation Bar -->
   <nav>
     <% if user_signed_in? %>
+      <p>Welcome, <%= current_user.email %>!</p>
       <%= form_with url: destroy_user_session_path, method: :delete do %>
         <%= submit_tag 'Logout' %>
       <% end %>

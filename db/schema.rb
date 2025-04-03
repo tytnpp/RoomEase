@@ -10,17 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_25_013631) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_25_013631) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_catalog.plpgsql"
+  enable_extension "plpgsql"
 
   create_table "reservations", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "room_id", null: false
-    t.datetime "start_time"
-    t.datetime "end_time"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.timestamptz "start_time"
+    t.timestamptz "end_time"
+    t.timestamptz "created_at", null: false
+    t.timestamptz "updated_at", null: false
     t.index ["room_id"], name: "index_reservations_on_room_id"
     t.index ["user_id"], name: "index_reservations_on_user_id"
   end
@@ -29,19 +29,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_25_013631) do
     t.string "name"
     t.integer "capacity"
     t.integer "status"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.timestamptz "created_at", null: false
+    t.timestamptz "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
     t.string "email"
     t.string "password_digest"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.timestamptz "created_at", null: false
+    t.timestamptz "updated_at", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
+    t.timestamptz "reset_password_sent_at"
+    t.timestamptz "remember_created_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

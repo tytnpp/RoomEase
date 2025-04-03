@@ -43,11 +43,16 @@ class ReservationsController < ApplicationController
 
   def activity
     # Current reservations (reservations that are active right now)
-    @current_reservations = current_user.reservations.where("start_time <= ? AND end_time >= ?", Time.current, Time.current)
+    @current_reservations = current_user.reservations
+                                        .where("start_time >= ?", Time.zone.now)
+                                        .order(start_time: :asc)
   
     # Reservation history (reservations that have already ended)
-    @past_reservations = current_user.reservations.where("end_time < ?", Time.current).order(end_time: :desc)
+    @past_reservations = current_user.reservations
+                                     .where("start_time <= ?", Time.zone.now)
+                                     .order(end_time: :desc)
   end
+  
 
   def edit
     @reservation = Reservation.find(params[:id])

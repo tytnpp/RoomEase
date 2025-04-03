@@ -9,6 +9,9 @@
   <div>
     <%= f.label :password %>
     <%= f.password_field :password %>
+    <% if flash[:alert] %>
+      <p style="color: red; font-size: 14px;"><%= flash[:alert] %></p>
+    <% end %>
   </div>
 
   <%= f.submit "Login" %>
