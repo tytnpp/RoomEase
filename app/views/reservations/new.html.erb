@@ -1,12 +1,14 @@
 <%= form_with(model: [@room, @reservation], local: true) do |f| %>
   <div>
     <%= f.label :start_time, "Start Time" %>
-    <%= f.datetime_select :start_time %>
+    <%= f.select :start_time, 
+          options_for_select((9..18).map { |hour| ["#{hour}:00", Time.zone.now.change(hour: hour, min: 0)] }) %>
   </div>
 
   <div>
     <%= f.label :end_time, "End Time" %>
-    <%= f.datetime_select :end_time %>
+    <%= f.select :end_time, 
+          options_for_select((9..18).map { |hour| ["#{hour}:00", Time.zone.now.change(hour: hour, min: 0)] }) %>
   </div>
 
   <%= f.submit "Reserve", class: "btn btn-primary" %>

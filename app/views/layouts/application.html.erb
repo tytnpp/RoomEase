@@ -28,43 +28,94 @@
 </html>
 -->
 
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html>
 <head>
   <title>Office Room Reservation</title>
-  <%= csrf_meta_tags %>
-  <%= csp_meta_tag %>
-  <%= stylesheet_link_tag 'application', media: 'all' %>
-  <%= javascript_include_tag 'application' %>
-</head>
+  <%#= csrf_meta_tags %>-->
+  <%#= csp_meta_tag %>
+  <%#= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  <%#= stylesheet_link_tag 'application', media: 'all' %>
+  <%#= javascript_include_tag 'application' %>
+<!--</head>
 <body>
+
   <!-- Navigation Bar -->
-  <nav>
-    <% if user_signed_in? %>
-      <p>Welcome, <%= current_user.email %>!</p>
-      <%= form_with url: destroy_user_session_path, method: :delete do %>
-        <%= submit_tag 'Logout' %>
-      <% end %>
-    <% else %>
-      <%= link_to 'Login', new_user_session_path %>
-    <% end %>
-  </nav>
+<!--  <nav>-->
+    <%# if user_signed_in? %>
+<!--      <p>Welcome, <%#= current_user.email %>!</p>-->
+      <%#= form_with url: destroy_user_session_path, method: :delete do %>
+        <%#= submit_tag 'Logout' %>
+      <%# end %>
+    <%# else %>
+      <%#= link_to 'Login', new_user_session_path %>
+    <%# end %>
+<!--  </nav>
 
   <div class="container">
-    <!-- Sidebar -->
-    <% if user_signed_in? %>
-      <aside class="sidebar">
+    Sidebar -->
+    <%# if user_signed_in? %>
+<!--      <aside class="sidebar">
         <ul>
-          <li><%= link_to 'Rooms', rooms_path %></li>
-          <li><%= link_to 'Activity', activity_path %></li>
+          <li><%#= link_to 'Rooms', rooms_path %></li>
+          <li><%#= link_to 'Activity', activity_path %></li>
         </ul>
       </aside>
-    <% end %>
+    <%# end %>-->
+<!---->
+ 
+<!--    <main class="content">-->
+      <%#= yield %>
+<!--    </main>
+  </div>
+</body>
+</html>-->
+
+<!DOCTYPE html>
+<html>
+<title>Office Room Reservation</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+<body class="bg-gray-100">
+
+  <% if user_signed_in? %>
+    <!-- Navbar -->
+    <header class="bg-white shadow">
+      <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+    <!-- Left Section: Title -->
+    <h1 class="text-xl font-bold text-gray-800">RoomEase</h1>
+
+    <!-- Right Section: User Info and Logout -->
+    <div class="flex items-center space-x-4">
+      <span class="text-gray-700">Welcome, <%= current_user.email %></span>
+      <%= form_with url: destroy_user_session_path, method: :delete, class: "inline-block" do %>
+        <%= submit_tag 'Logout', class: "bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 cursor-pointer" %>
+      <% end %>
+    </div>
+  </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar bg-gray-100 w-64 h-screen fixed">
+      <ul class="space-y-2 p-4">
+          <li><%= link_to 'Rooms', rooms_path %></li>
+          <li><%= link_to 'Activity', activity_path %></li>
+      </ul>
+    </aside>
 
     <!-- Main Content -->
-    <main class="content">
+    <main class="ml-64 p-4">
       <%= yield %>
     </main>
-  </div>
+  <% else %>
+    <!-- Content for non-logged-in users -->
+    <main class="p-4">
+      <%= yield %>
+    </main>
+  <% end %>
+
 </body>
 </html>
