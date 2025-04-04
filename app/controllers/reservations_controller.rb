@@ -27,6 +27,19 @@ class ReservationsController < ApplicationController
     redirect_to rooms_path, notice: "Reservation cancelled successfully."
   end
 
+  def edit
+    @reservation = Reservation.find(params[:id])
+  end
+  
+  def update
+    @reservation = Reservation.find(params[:id])
+    if @reservation.update(reservation_params)
+      redirect_to activity_path, notice: "Reservation updated successfully."
+    else
+      render :edit
+    end
+  end
+
   private
 
   def set_room
@@ -51,19 +64,5 @@ class ReservationsController < ApplicationController
     @past_reservations = current_user.reservations
                                      .where("start_time <= ?", Time.zone.now)
                                      .order(end_time: :desc)
-  end
-  
-
-  def edit
-    @reservation = Reservation.find(params[:id])
-  end
-  
-  def update
-    @reservation = Reservation.find(params[:id])
-    if @reservation.update(reservation_params)
-      redirect_to activity_path, notice: "Reservation updated successfully."
-    else
-      render :edit
-    end
   end
 end

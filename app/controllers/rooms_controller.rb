@@ -6,20 +6,26 @@ class RoomsController < ApplicationController
   end
 
   def show
-    @room = Room.find(params[:id])
+  @room = Room.find(params[:id])
 
-    # Define time slots (9 AM to 6 PM)
-    start_time = Time.current.change(hour: 9, min: 0, sec: 0)
-    end_time = Time.current.change(hour: 18, min: 0, sec: 0)
-    @time_slots = []
+  # Define time slots (9 AM to 6 PM)
+  start_time = Time.current.change(hour: 9, min: 0, sec: 0)
+  end_time = Time.current.change(hour: 18, min: 0, sec: 0)
+  @time_slots = []
 
-    while start_time < end_time
-      slot_end_time = start_time + 1.hour
-      is_available = @room.reservations.where("start_time < ? AND end_time > ?", slot_end_time, start_time).empty?
-      @time_slots << { start_time: start_time, end_time: slot_end_time, available: is_available }
-      start_time = slot_end_time
-    end
+  while start_time < end_time
+    slot_end_time = start_time + 1.hour
+
+    # Check for overlapping reservations that are still active or in the future
+    is_available = @room.reservations
+                        .where("start_time < ? AND end_time > ?", slot_end_time, start_time)
+                        .where("end_time > ?", Time.current) # Exclude past reservations
+                        .empty?
+
+    @time_slots << { start_time: start_time, end_time: slot_end_time, available: is_available }
+    start_time = slot_end_time
   end
+end
 
   def new
     @room = Room.new
