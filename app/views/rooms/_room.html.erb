@@ -1,0 +1,12 @@
+<%= link_to room_path(room), class: "block bg-white shadow-lg rounded-2xl p-4 border border-gray-300 hover:shadow-xl transition duration-300" do %>
+  <div class="mt-4 flex justify-between items-center">
+    <h2 class="text-xl font-semibold text-gray-900 hover:underline"><%= room.name %></h2>
+    <span class="text-gray-500 text-sm">Capacity: <%= room.capacity %></span>
+  </div>
+
+  <div class="text-yellow-500 mt-1">
+    ⭐⭐⭐⭐⭐ <span class="text-gray-500 text-sm">(256 Reviews)</span>
+  </div>
+
+  <p class="text-gray-500 text-sm mt-2">0.7 km to the center</p>
+<% end %>

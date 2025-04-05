@@ -1,6 +1,6 @@
 class ReservationsController < ApplicationController
   before_action :set_room, only: [:new, :create]
-  before_action :set_reservation, only: [:show, :destroy]
+  before_action :set_reservation, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, only: [:activity]
   before_action :activity, only: [:activity]
 
@@ -24,8 +24,8 @@ class ReservationsController < ApplicationController
 
   def destroy
     @reservation.destroy
-    redirect_to rooms_path, notice: "Reservation cancelled successfully."
-  end
+    redirect_to activity_path, notice: "Reservation cancelled successfully."
+  end  
 
   def edit
     @reservation = Reservation.find(params[:id])
