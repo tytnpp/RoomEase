@@ -1,60 +1,177 @@
-<h1>Activity</h1>
+<div class="space-y-8">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-gray-800">Activity</h1>
+  </div>
 
-<!-- Current and Future Reservations -->
-<h2>Current Reservations</h2>
-<% if @current_reservations.any? %>
-  <ul>
-    <% @current_reservations.each do |reservation| %>
-      <li>
-        Room: <%= reservation.room.name %><br>
-        Start: <%= reservation.start_time.strftime("%d %B %Y, %H:%M") %><br>
-        End: <%= reservation.end_time.strftime("%d %B %Y, %H:%M") %><br>
-        <%= link_to 'Edit', edit_room_reservation_path(reservation.room, reservation), class: 'btn btn-primary' %> |
-        <%= link_to 'Cancel', room_reservation_path(reservation.room, reservation), method: :delete, data: { confirm: 'Are you sure you want to cancel this reservation?' }, class: 'btn btn-danger' %>
-      </li>
+  <!-- Current and Future Reservations -->
+  <div class="bg-white rounded-xl shadow-md overflow-hidden">
+    <div class="px-6 py-4 bg-indigo-50 border-b border-indigo-100">
+      <h2 class="text-lg font-semibold text-gray-900">Current & Upcoming Reservations</h2>
+    </div>
+    
+    <% if @current_reservations.any? %>
+      <div class="divide-y divide-gray-200">
+        <% @current_reservations.each do |reservation| %>
+          <div class="p-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div class="flex-1">
+                <div class="flex items-start">
+                  <div class="flex-shrink-0 h-10 w-10 rounded-md bg-indigo-100 flex items-center justify-center text-indigo-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                  </div>
+                  <div class="ml-4">
+                    <h3 class="text-lg font-medium text-gray-900">
+                      <%= link_to reservation.room.name, room_path(reservation.room), class: "hover:text-indigo-600" %>
+                    </h3>
+                    <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
+                      <div class="mt-2 flex items-center text-sm text-gray-500">
+                        <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                        </svg>
+                        <%= reservation.start_time.strftime("%d %B %Y") %>
+                      </div>
+                      <div class="mt-2 flex items-center text-sm text-gray-500">
+                        <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                        </svg>
+                        <%= reservation.start_time.strftime("%H:%M") %> - <%= reservation.end_time.strftime("%H:%M") %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="flex items-center space-x-2">
+                <%= link_to edit_room_reservation_path(reservation.room, reservation), class: "inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" do %>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  Edit
+                <% end %>
+                
+                <%= link_to room_reservation_path(reservation.room, reservation), method: :delete, data: { confirm: 'Are you sure you want to cancel this reservation?' }, class: "inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" do %>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  Cancel
+                <% end %>
+              </div>
+            </div>
+            
+            <% if reservation.respond_to?(:notes) && reservation.notes.present? %>
+              <div class="mt-4 bg-gray-50 p-3 rounded-md">
+                <p class="text-sm text-gray-600"><%= reservation.notes %></p>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="p-6 text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">No upcoming reservations</h3>
+        <p class="mt-1 text-sm text-gray-500">Get started by reserving a room.</p>
+        <div class="mt-6">
+          <%= link_to rooms_path, class: "inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            Browse Rooms
+          <% end %>
+        </div>
+      </div>
     <% end %>
-  </ul>
-<% else %>
-  <p>No current or future reservations.</p>
-<% end %>
+  </div>
 
-<!-- Reservation History -->
-<h2>Reservation History</h2>
-<% if @past_reservations.any? %>
-  <ul>
-    <% @past_reservations.each do |reservation| %>
-      <li>
-        Room: <%= reservation.room.name %><br>
-        Date: <%= reservation.start_time.strftime("%d %B %Y") %><br>
-        Start: <%= reservation.start_time.strftime("%H:%M") %><br>
-        End: <%= reservation.end_time.strftime("%H:%M") %>
-      </li>
+  <!-- Reservation History -->
+  <div class="bg-white rounded-xl shadow-md overflow-hidden">
+    <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+      <h2 class="text-lg font-semibold text-gray-900">Reservation History</h2>
+    </div>
+    
+    <% if @past_reservations.any? %>
+      <div class="overflow-hidden overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Room</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <% @past_reservations.each do |reservation| %>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    <div class="flex-shrink-0 h-8 w-8 rounded bg-indigo-100 flex items-center justify-center text-indigo-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                      </svg>
+                    </div>
+                    <div class="ml-4">
+                      <div class="text-sm font-medium text-gray-900">
+                        <%= link_to reservation.room.name, room_path(reservation.room), class: "hover:text-indigo-600" %>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900"><%= reservation.start_time.strftime("%d %B %Y") %></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900"><%= reservation.start_time.strftime("%H:%M") %> - <%= reservation.end_time.strftime("%H:%M") %></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <% duration_minutes = ((reservation.end_time - reservation.start_time) / 60).to_i %>
+                  <% if duration_minutes >= 60 %>
+                    <%= "#{duration_minutes / 60}h #{duration_minutes % 60}m" %>
+                  <% else %>
+                    <%= "#{duration_minutes}m" %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Pagination (if implemented) -->
+      <% if @past_reservations.respond_to?(:total_pages) %>
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+          <nav class="flex items-center justify-between">
+            <div class="flex-1 flex justify-between sm:hidden">
+              <%= link_to_prev_page @past_reservations, 'Previous', class: 'relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50' %>
+              <%= link_to_next_page @past_reservations, 'Next', class: 'ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50' %>
+            </div>
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+              <div>
+                <p class="text-sm text-gray-700">
+                  Showing <span class="font-medium"><%= @past_reservations.offset_value + 1 %></span> to <span class="font-medium"><%= @past_reservations.offset_value + @past_reservations.length %></span> of <span class="font-medium"><%= @past_reservations.total_count %></span> results
+                </p>
+              </div>
+              <div>
+                <%= paginate @past_reservations, window: 2, outer_window: 1, theme: 'tailwindcss' %>
+              </div>
+            </div>
+          </nav>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="p-6 text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">No reservation history</h3>
+        <p class="mt-1 text-sm text-gray-500">Your past reservations will appear here.</p>
+      </div>
     <% end %>
-  </ul>
-<% else %>
-  <p>No past reservations.</p>
-<% end %>
+  </div>
+</div>
 
-<!--Pagination Links-->
-<!--<h2>Reservation History</h2>-->
-<%# if @past_reservations.any? %>
-<!--  <ul>-->
-    <%# @past_reservations.each do |reservation| %>
-<!--      <li>
-        Room: <%#= reservation.room.name %><br>
-        Start: <%#= reservation.start_time.strftime("%d %B %Y, %H:%M") %><br>
-        End: <%#= reservation.end_time.strftime("%d %B %Y, %H:%M") %>
-      </li>
-    <%# end %>-->
-<!--  </ul>
 
-  Pagination Links 
-  <div class="pagination">
-    <%#= paginate @past_reservations %>-->
-<!--  </div>-->
-<%# else %>
-<!--  <p>No past reservations.</p>-->
-<%# end %>
-
-<!--Add kaminari pagination with tailwindcss-->
-<!--rails g kaminari:views tailwindcss-->

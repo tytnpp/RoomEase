@@ -23,9 +23,10 @@ class ReservationsController < ApplicationController
   end
 
   def destroy
+    @reservation = Reservation.find(params[:id])
     @reservation.destroy
-    redirect_to activity_path, notice: "Reservation cancelled successfully."
-  end  
+    redirect_to activity_path, notice: "Reservation canceled successfully."
+  end 
 
   def edit
     @reservation = Reservation.find(params[:id])

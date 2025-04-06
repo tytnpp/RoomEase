@@ -1,5 +1,148 @@
-<div class="max-w-5xl mx-auto mt-6 space-y-6 bg-gray-50 p-6 rounded-lg shadow-lg">
-  <% @rooms.each do |room| %>
-    <%= render 'rooms/room', room: room %>
+<div class="w-full">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Available Rooms</h1>
+    
+    <div class="relative w-full sm:w-auto sm:min-w-[300px]">
+      <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+      <input 
+        type="text" 
+        id="room-search" 
+        class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 pr-10 py-2.5" 
+        placeholder="Search room name..." 
+      />
+      <button id="clear-search" class="absolute inset-y-0 right-0 flex items-center pr-3 hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  
+  <div id="rooms-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+    <% @rooms.each do |room| %>
+      <%= link_to room_path(room), class: "room-card block bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100", data: { name: room.name.downcase } do %>
+        
+        <div class="p-5">
+          <div class="flex justify-between items-start">
+            <h2 class="text-lg font-semibold text-gray-900 group-hover:text-indigo-600"><%= room.name %></h2>
+            <span class="text-sm font-medium text-gray-700 bg-gray-100 px-2 py-1 rounded-lg">
+              <%= room.capacity %> <span class="hidden sm:inline">people</span>
+            </span>
+          </div>
+          
+          <div class="mt-3 flex flex-wrap gap-2">
+            <% if room.respond_to?(:features) && room.features.present? %>
+                <% room.features.each do |feature, available| %>
+                <% if available %>
+                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                    <%= feature.to_s.upcase %>
+                    </span>
+                <% end %>
+                <% end %>
+            <% else %>
+                <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                No features available
+                </span>
+            <% end %>
+          </div>
+          
+          <div class="mt-4 flex justify-between items-center">
+            <span class="text-indigo-600 text-sm font-medium hover:underline">View details</span>
+            <!-- Room Status -->
+            <div class="flex items-center">
+                <% current_time = Time.zone.now %>
+                <% opening_time = Time.zone.parse("09:00") %>
+                <% closing_time = Time.zone.parse("18:00") %>
+
+                <% if current_time >= opening_time && current_time <= closing_time %>
+                    <span class="px-2 py-1 text-xs font-medium rounded-full 
+                    <%= room.available? ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+                    <%= room.status.capitalize %>
+                    </span>
+                <% else %>
+                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
+                    Closed
+                    </span>
+                <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  
+  <div id="no-results" class="bg-white rounded-xl shadow p-8 text-center hidden">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <h3 class="mt-4 text-lg font-medium text-gray-900">No matching rooms</h3>
+    <p class="mt-2 text-gray-500">Try adjusting your search to find what you're looking for.</p>
+  </div>
+  
+  <% if @rooms.empty? %>
+    <div class="bg-white rounded-xl shadow p-8 text-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <h3 class="mt-4 text-lg font-medium text-gray-900">No rooms available</h3>
+      <p class="mt-2 text-gray-500">There are currently no rooms available for booking.</p>
+    </div>
   <% end %>
 </div>
+
+<!-- JavaScript for search functionality -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('room-search');
+    const clearButton = document.getElementById('clear-search');
+    const roomCards = document.querySelectorAll('.room-card');
+    const roomsContainer = document.getElementById('rooms-container');
+    const noResults = document.getElementById('no-results');
+    
+    // Function to filter rooms
+    function filterRooms() {
+      const searchTerm = searchInput.value.trim().toLowerCase();
+      let visibleCount = 0;
+      
+      roomCards.forEach(card => {
+        const roomName = card.getAttribute('data-name');
+        if (roomName.includes(searchTerm)) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      
+      // Show/hide no results message
+      if (visibleCount === 0 && searchTerm !== '') {
+        noResults.classList.remove('hidden');
+        roomsContainer.classList.add('hidden');
+      } else {
+        noResults.classList.add('hidden');
+        roomsContainer.classList.remove('hidden');
+      }
+      
+      // Show/hide clear button
+      if (searchTerm === '') {
+        clearButton.classList.add('hidden');
+      } else {
+        clearButton.classList.remove('hidden');
+      }
+    }
+    
+    // Event listener for search input
+    searchInput.addEventListener('input', filterRooms);
+    
+    // Event listener for clear button
+    clearButton.addEventListener('click', function() {
+      searchInput.value = '';
+      filterRooms();
+      searchInput.focus();
+    });
+  });
+</script>

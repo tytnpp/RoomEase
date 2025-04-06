@@ -13,11 +13,12 @@ Room.destroy_all
 
 # Create mock room data
 rooms = [
-  { name: 'Conference Room A', capacity: 10, status: 0 },
-  { name: 'Conference Room B', capacity: 20, status: 1 },
-  { name: 'Meeting Room 1', capacity: 5, status: 0 },
-  { name: 'Meeting Room 2', capacity: 8, status: 2 },
-  { name: 'Event Hall', capacity: 50, status: 0 }
+  { name: 'Room Territory 1', capacity: 10, status: 0, features: { tv: true, ac: true, wifi: false }},
+  { name: 'Room Territory 2', capacity: 10, status: 0, features: { tv: false, ac: true, wifi: true }},
+  { name: 'Meeting Room 1', capacity: 5, status: 0, features: { tv: true, ac: true, wifi: true }},
+  { name: 'Meeting Room 2', capacity: 5, status: 0, features: { tv: false, ac: false, wifi: true }},
+  { name: 'All Nighter', capacity: 15, status: 0, features: { tv: true, ac: true, wifi: true }},
+  { name: 'Global', capacity: 20, status: 0, features: { tv: true, ac: true, wifi: true }},
 ]
 
 rooms.each do |room_data|
