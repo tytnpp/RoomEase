@@ -32,25 +32,22 @@
         </div>
       </div>
 
+
+
       <!-- Reservation Form -->
       <%= form_with(model: [@room, @reservation], local: true, class: "space-y-6") do |f| %>
-        <!-- Date Selection -->
-        <div>
-          <label for="reservation_date" class="block text-sm font-medium text-gray-700">Date</label>
-          <div class="mt-1 relative rounded-md shadow-sm">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-            </div>
-            <input type="date" name="reservation_date" id="reservation_date" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md" value="<%= Date.today.strftime('%Y-%m-%d') %>">
-          </div>
-        </div>
 
+        <!-- Date Display -->
+        <div>
+            <label class="block text-sm font-medium text-gray-900">Reservation Date</label>
+            <div class="mt-1">
+                <p class="text-base text-gray-500"><%= Date.today.strftime('%A, %B %d, %Y') %></p>
+            </div>
+        </div>
         <!-- Time Selection -->
         <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
           <div>
-            <%= f.label :start_time, "Start Time", class: "block text-sm font-medium text-gray-700" %>
+            <%= f.label :start_time, "Start Time", class: "block text-sm font-medium text-gray-900" %>
             <div class="mt-1">
               <%= f.select :start_time, 
                     options_for_select((9..17).map { |hour| ["#{hour}:00", Time.zone.now.change(hour: hour, min: 0)] }),
@@ -60,7 +57,7 @@
           </div>
 
           <div>
-            <%= f.label :end_time, "End Time", class: "block text-sm font-medium text-gray-700" %>
+            <%= f.label :end_time, "End Time", class: "block text-sm font-medium text-gray-900" %>
             <div class="mt-1">
               <%= f.select :end_time, 
                     options_for_select((10..18).map { |hour| ["#{hour}:00", Time.zone.now.change(hour: hour, min: 0)] }),

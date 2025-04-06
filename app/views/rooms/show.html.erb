@@ -39,7 +39,7 @@
         <% if @room.respond_to?(:features) && @room.features.present? %>
         <% @room.features.each do |feature, available| %>
             <% if available %>
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-600 text-white">
                 <%= feature.to_s.upcase %>
             </span>
             <% end %>
@@ -54,26 +54,9 @@
 
     <!-- Date Picker Section (Optional) -->
     <div class="mt-6 bg-white rounded-xl shadow-md overflow-hidden p-6">
-    <h2 class="text-lg font-semibold text-gray-900 mb-4">Select a different date</h2>
-    
-    <div class="flex flex-col sm:flex-row gap-4">
-        <div class="relative flex-grow">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-        </div>
-        <input type="date" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Select date">
-        </div>
-        
-        <button type="button" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-        Check Availability
-        </button>
-    </div>
-    </div>
     
     <!-- Time Slots Section -->
-    <div class="mt-8">
+    <div class="mt-2">
       <h2 class="text-lg font-semibold text-gray-900 mb-4">Available Time Slots</h2>
       
       <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
@@ -90,24 +73,30 @@
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              <% @time_slots.each do |slot| %>
-                <tr class="hover:bg-gray-50">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">
-                    <%= slot[:start_time].strftime("%H:%M") %> - <%= slot[:end_time].strftime("%H:%M") %>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
-                    <% if slot[:available] %>
-                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        Available
-                      </span>
-                    <% else %>
-                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                        Occupied
-                      </span>
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
+                <% @time_slots.each do |slot| %>
+                    <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">
+                        <%= slot[:start_time].strftime("%H:%M") %> - <%= slot[:end_time].strftime("%H:%M") %>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
+                        <% if Time.zone.now >= slot[:start_time] && Time.zone.now <= slot[:end_time] %>
+                        <% if slot[:available] %>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Available
+                            </span>
+                        <% else %>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                            Occupied
+                            </span>
+                        <% end %>
+                        <% else %>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                            Closed
+                        </span>
+                        <% end %>
+                    </td>
+                    </tr>
+                <% end %>
             </tbody>
           </table>
         </div>

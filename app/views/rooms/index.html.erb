@@ -38,7 +38,7 @@
             <% if room.respond_to?(:features) && room.features.present? %>
                 <% room.features.each do |feature, available| %>
                 <% if available %>
-                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                    <span class="text-xs bg-indigo-600 text-white px-2 py-1 rounded">
                     <%= feature.to_s.upcase %>
                     </span>
                 <% end %>
