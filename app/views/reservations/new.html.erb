@@ -158,36 +158,35 @@
 <script>
   // Show the modal if there are errors
   document.addEventListener("DOMContentLoaded", () => {
-    const errorModal = document.getElementById("errorModal");
-    const hasErrors = <%= @reservation.errors.any? ? 'true' : 'false' %>;
+  const startTimeSelect = document.querySelector('select[name="reservation[start_time]"]');
+  const endTimeSelect = document.querySelector('select[name="reservation[end_time]"]');
+  
+  if (startTimeSelect && endTimeSelect) {
+    startTimeSelect.addEventListener('change', function() {
+      const startHour = parseInt(this.options[this.selectedIndex].text);
+      const startDate = new Date(); // Current date
+      startDate.setHours(startHour, 0, 0, 0); // Set to the selected hour
+      
+      // Calculate end time by adding 1 hour
+      const endDate = new Date(startDate.getTime() + (60 * 60 * 1000)); // +1 hour
 
-    if (hasErrors) {
-      errorModal.classList.remove("hidden");
-    }
-    
-    // Time validation
-    const startTimeSelect = document.querySelector('select[name="reservation[start_time]"]');
-    const endTimeSelect = document.querySelector('select[name="reservation[end_time]"]');
-    
-    if (startTimeSelect && endTimeSelect) {
-      startTimeSelect.addEventListener('change', function() {
-        const startHour = parseInt(this.options[this.selectedIndex].text);
-        
-        // Clear end time options
-        while (endTimeSelect.options.length > 0) {
-          endTimeSelect.remove(0);
-        }
-        
-        // Add new options starting from startHour + 1
-        for (let hour = startHour + 1; hour <= 18; hour++) {
-          const option = document.createElement('option');
-          option.text = `${hour}:00`;
-          option.value = new Date().setHours(hour, 0, 0, 0);
-          endTimeSelect.add(option);
-        }
-      });
-    }
-  });
+      // Set end time options
+      while (endTimeSelect.options.length > 0) {
+        endTimeSelect.remove(0);
+      }
+
+      // Add the new options starting from startDate + 1 hour
+      const option = document.createElement('option');
+      option.text = `${endDate.getHours()}:00`;
+      option.value = endDate.toISOString(); // Set the value as an ISO string
+      endTimeSelect.add(option);
+      
+      // If you have a hidden input for end_time, update its value as well
+      document.querySelector('input[name="reservation[end_time]"]').value = endDate.toISOString();
+    });
+  }
+});
+
 
   document.addEventListener("DOMContentLoaded", () => {
     const startTimeSelect = document.querySelector('select[name="reservation[start_time]"]');

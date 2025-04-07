@@ -22,6 +22,15 @@ class ReservationsController < ApplicationController
   def show
   end
 
+  def cancel
+    @reservation = Reservation.find(params[:id])
+    if @reservation.destroy
+      redirect_to activity_path, notice: "Reservation canceled successfully."
+    else
+      redirect_to activity_path, alert: "There was an error canceling the reservation."
+    end
+  end
+
   def destroy
     @reservation = Reservation.find(params[:id])
     @reservation.destroy
