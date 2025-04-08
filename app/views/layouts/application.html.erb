@@ -7,7 +7,8 @@
   <%= csp_meta_tag %>
   <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
   <%= stylesheet_link_tag 'application', media: 'all' %>
-  <%= javascript_include_tag 'application' %>
+  <%= javascript_include_tag 'application',type: 'moduel', 'data-turbo-track': 'reload', crossorigin: 'anonymous' %>
+  <%= javascript_importmap_tags %>
   <link rel="icon" href="<%= asset_path('roomease_logo.png') %>" type="image/x-icon">
 </head>
 <body class="bg-gray-50">

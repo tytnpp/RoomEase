@@ -1,11 +1,56 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
-  capacity: 1
-  status: 1
+room_territory_1:
+  name: "Room Territory 1"
+  capacity: 10
+  status: 0
+  features:
+    tv: true
+    ac: true
+    wifi: false
 
-two:
-  name: MyString
-  capacity: 1
-  status: 1
+room_territory_2:
+  name: "Room Territory 2"
+  capacity: 10
+  status: 0
+  features:
+    tv: false
+    ac: true
+    wifi: true
+
+meeting_room_1:
+  name: "Meeting Room 1"
+  capacity: 5
+  status: 0
+  features:
+    tv: true
+    ac: true
+    wifi: true
+
+meeting_room_2:
+  name: "Meeting Room 2"
+  capacity: 5
+  status: 0
+  features:
+    tv: false
+    ac: false
+    wifi: true
+
+all_nighter:
+  name: "All Nighter"
+  capacity: 15
+  status: 0
+  features:
+    tv: true
+    ac: true
+    wifi: true
+
+global:
+  name: "Global"
+  capacity: 20
+  status: 0
+  features:
+    tv: true
+    ac: true
+    wifi: true
+

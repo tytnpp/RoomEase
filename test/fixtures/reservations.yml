@@ -1,13 +1,20 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+reservation_one:
   user: one
-  room: one
-  start_time: 2025-03-25 08:36:16
-  end_time: 2025-03-25 08:36:16
+  room: room_territory_1
+  start_time: <%= Time.zone.now + 1.day %>
+  end_time: <%= Time.zone.now + 1.day + 2.hours %>
 
-two:
-  user: two
-  room: two
-  start_time: 2025-03-25 08:36:16
-  end_time: 2025-03-25 08:36:16
+reservation_two:
+  user: one
+  room: meeting_room_1
+  start_time: <%= Time.zone.now - 2.days %>
+  end_time: <%= Time.zone.now - 2.days + 1.hour %>
+
+reservation_three:
+  user: one
+  room: global
+  start_time: <%= Time.zone.now + 3.days %>
+  end_time: <%= Time.zone.now + 3.days + 1.hour %>
+
