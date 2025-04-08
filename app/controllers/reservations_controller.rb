@@ -1,8 +1,8 @@
 class ReservationsController < ApplicationController
-  before_action :set_room, only: [:new, :create]
-  before_action :set_reservation, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, only: [:activity]
-  before_action :activity, only: [:activity]
+  before_action :set_room, only: [ :new, :create ]
+  before_action :set_reservation, only: [ :show, :edit, :update, :destroy ]
+  before_action :authenticate_user!, only: [ :activity ]
+  before_action :activity, only: [ :activity ]
 
   def new
     @reservation = @room.reservations.build
@@ -11,7 +11,7 @@ class ReservationsController < ApplicationController
   def create
     @reservation = @room.reservations.build(reservation_params)
     @reservation.user = current_user
-  
+
     if @reservation.save
       redirect_to rooms_path, notice: "Reservation created successfully."
     else
@@ -35,12 +35,12 @@ class ReservationsController < ApplicationController
     @reservation = Reservation.find(params[:id])
     @reservation.destroy
     redirect_to activity_path, notice: "Reservation canceled successfully."
-  end 
+  end
 
   def edit
     @reservation = Reservation.find(params[:id])
   end
-  
+
   def update
     @reservation = Reservation.find(params[:id])
     if @reservation.update(reservation_params)
@@ -69,7 +69,7 @@ class ReservationsController < ApplicationController
     @current_reservations = current_user.reservations
                                         .where("start_time >= ?", Time.zone.now)
                                         .order(start_time: :asc)
-  
+
     # Reservation history (reservations that have already ended)
     @past_reservations = current_user.reservations
                                      .where("start_time <= ?", Time.zone.now)
