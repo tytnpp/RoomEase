@@ -74,5 +74,7 @@ class ReservationsController < ApplicationController
     @past_reservations = current_user.reservations
                                      .where("start_time <= ?", Time.zone.now)
                                      .order(end_time: :desc)
+                                     .page(params[:page])
+                                     .per(7)
   end
 end

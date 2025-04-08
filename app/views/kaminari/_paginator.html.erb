@@ -1,0 +1,37 @@
+<div class="px-4 py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full">
+  <!-- Pagination Info -->
+  <div class="text-sm text-gray-700 text-center sm:text-left">
+    Showing
+    <span class="font-medium"><%= @past_reservations.offset_value + 1 %></span>
+    to
+    <span class="font-medium"><%= @past_reservations.offset_value + @past_reservations.length %></span>
+    of
+    <span class="font-medium"><%= @past_reservations.total_count %></span>
+    results —
+    Page <%= @past_reservations.current_page %> of <%= @past_reservations.total_pages %>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div class="flex justify-center sm:justify-end flex-wrap gap-2">
+    <!-- Prev (Always shown) -->
+    <% if @past_reservations.current_page > 1 %>
+      <%= link_to '← Prev', url_for(page: @past_reservations.current_page - 1), class: "px-3 py-1 rounded-md bg-white border border-gray-300 text-sm text-gray-700 hover:bg-gray-50" %>
+    <% end %>
+
+    <!-- Page Numbers (Desktop only) -->
+    <div class="hidden sm:flex gap-1">
+      <% 1.upto(@past_reservations.total_pages) do |page| %>
+        <% if page == @past_reservations.current_page %>
+          <span class="px-3 py-1 rounded-md bg-indigo-600 text-white border text-sm"><%= page %></span>
+        <% else %>
+          <%= link_to page, url_for(page: page), class: "px-3 py-1 rounded-md border text-sm bg-white text-gray-700 border-gray-300 hover:bg-gray-50" %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Next (Always shown) -->
+    <% if @past_reservations.current_page < @past_reservations.total_pages %>
+      <%= link_to 'Next →', url_for(page: @past_reservations.current_page + 1), class: "px-3 py-1 rounded-md bg-white border border-gray-300 text-sm text-gray-700 hover:bg-gray-50" %>
+    <% end %>
+  </div>
+</div>
