@@ -1,38 +1,38 @@
-<div class="flex items-center justify-cente min-w-screen">
-  <div class="w-full max-w-xl mx-auto mt-10 p-8 bg-white rounded-2xl shadow-md border border-gray-200 m-2 min-w-[500px]">
-    <h2 class="text-2xl font-bold mb-6 text-center mt-2">Log in</h2>
+<div class="flex items-center justify-cente min-w-screen" data-testid="login-page-container">
+  <div class="w-full max-w-xl mx-auto mt-10 p-8 bg-white rounded-2xl shadow-md border border-gray-200 m-2 min-w-[500px]" data-testid="login-card">
+    <h2 class="text-2xl font-bold mb-6 text-center mt-2" data-testid="login-title">Log in</h2>
 
     <% if flash[:alert].present? %>
-        <div class="mb-4 text-red-600 bg-red-100 border border-red-300 rounded-lg p-4">
-          <%= flash[:alert] %>
-        </div>
-      <% end %>
-
-    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-6" }) do |f| %>
-      
-      <div>
-        <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
-      </div>
-
-      <div>
-        <%= f.label :password, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.password_field :password, autocomplete: "current-password", class: "mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
-      </div>
-
-      <% if devise_mapping.rememberable? %>
-        <div class="flex items-center">
-          <%= f.check_box :remember_me, class: "h-4 w-4 text-indigo-600 border-gray-300 rounded" %>
-          <%= f.label :remember_me, class: "ml-2 block text-sm text-gray-900" %>
-        </div>
-      <% end %>
-
-      <div>
-        <%= f.submit "Log in", class: "w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-200" %>
+      <div class="mb-4 text-red-600 bg-red-100 border border-red-300 rounded-lg p-4" data-testid="login-alert">
+        <%= flash[:alert] %>
       </div>
     <% end %>
 
-    <div class="mt-6 text-center text-sm text-gray-500">
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-6", 'data-testid': "login-form" }) do |f| %>
+      
+      <div data-testid="email-input-container">
+        <%= f.label :email, class: "block text-sm font-medium text-gray-700", 'data-testid': "email-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500", 'data-testid': "email-input" %>
+      </div>
+
+      <div data-testid="password-input-container">
+        <%= f.label :password, class: "block text-sm font-medium text-gray-700", 'data-testid': "password-label" %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500", 'data-testid': "password-input" %>
+      </div>
+
+      <% if devise_mapping.rememberable? %>
+        <div class="flex items-center" data-testid="remember-me-container">
+          <%= f.check_box :remember_me, class: "h-4 w-4 text-indigo-600 border-gray-300 rounded", 'data-testid': "remember-me-checkbox" %>
+          <%= f.label :remember_me, class: "ml-2 block text-sm text-gray-900", 'data-testid': "remember-me-label" %>
+        </div>
+      <% end %>
+
+      <div data-testid="submit-button-container">
+        <%= f.submit "Log in", class: "w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-200", 'data-testid': "submit-button" %>
+      </div>
+    <% end %>
+
+    <div class="mt-6 text-center text-sm text-gray-500" data-testid="login-links">
       <%= render "devise/shared/links" %>
     </div>
   </div>

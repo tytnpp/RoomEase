@@ -1,8 +1,8 @@
-<div class="bg-white rounded-xl shadow-md overflow-hidden">
+<div class="bg-white rounded-xl shadow-md overflow-hidden" data-testid="room-details">
   <!-- Room Header Section -->
-  <div class="relative h-48 bg-gray-200">
+  <div class="relative h-48 bg-gray-200" data-testid="room-header">
     <!-- Back button -->
-    <div class="absolute top-4 left-4 bg-white/80 backdrop-blur-sm p-2 rounded-full hover:bg-white transition-colors duration-200">
+    <div class="absolute top-4 left-4 bg-white/80 backdrop-blur-sm p-2 rounded-full hover:bg-white transition-colors duration-200" data-testid="back-button">
       <%= link_to rooms_path do %>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -12,7 +12,7 @@
   </div>
   
   <!-- Room Details Section -->
-  <div class="p-6">
+  <div class="p-6" data-testid="rooms-detail-section">
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
       <div>
         <h1 class="text-2xl font-bold text-gray-900"><%= @room.name %></h1>
@@ -24,7 +24,7 @@
         </div>
       </div>
       
-      <%= link_to new_room_reservation_path(@room), class: "inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200" do %>
+      <%= link_to new_room_reservation_path(@room), class: "inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200", "data-testid": "reserve-button" do %>
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>

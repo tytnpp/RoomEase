@@ -1,16 +1,16 @@
-<div class="space-y-8">
-  <div class="flex items-center justify-between">
+<div class="space-y-8" data-testid="activity-page">
+  <div class="flex items-center justify-between" data-testid="activity-header">
     <h1 class="text-2xl font-bold text-gray-800">Activity</h1>
   </div>
 
   <!-- Current and Future Reservations -->
-  <div class="bg-white rounded-xl shadow-md overflow-hidden">
+  <div class="bg-white rounded-xl shadow-md overflow-hidden" data-testid="current-reservations">
     <div class="px-6 py-4 bg-indigo-50 border-b border-indigo-100">
       <h2 class="text-lg font-semibold text-gray-900">Current & Upcoming Reservations</h2>
     </div>
     
     <% if @current_reservations.any? %>
-      <div class="divide-y divide-gray-200">
+      <div class="divide-y divide-gray-200" data-testid="current-reservation-list">
         <% @current_reservations.each do |reservation| %>
           <div class="p-6">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -43,8 +43,8 @@
                 </div>
               </div>
               
-              <div class="flex items-center space-x-2 justify-end">
-                <%= link_to edit_room_reservation_path(reservation.room, reservation), class: "inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" do %>
+              <div class="flex items-center space-x-2 justify-end" data-testid="reservation-actions">
+                <%= link_to edit_room_reservation_path(reservation.room, reservation), class: "inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500", "data-testid": "edit-reservation-#{index}" do %>
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                   </svg>
@@ -52,7 +52,7 @@
                 <% end %>
 
                  <!-- Cancel reservation button (Redirects to cancel page) -->
-                <%= link_to cancel_room_reservation_path(reservation.room, reservation), class: "inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" do %>
+                <%= link_to cancel_room_reservation_path(reservation.room, reservation), class: "inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500", "data-testid": "cancel-reservation-#{index}" do %>
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
@@ -70,7 +70,7 @@
         <% end %>
       </div>
     <% else %>
-      <div class="p-6 text-center">
+      <div class="p-6 text-center" data-testid="no-current-reservations">
         <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
@@ -89,13 +89,13 @@
   </div>
 
   <!-- Reservation History -->
-  <div class="bg-white rounded-xl shadow-md overflow-hidden">
-    <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+  <div class="bg-white rounded-xl shadow-md overflow-hidden" data-testid="reservation-history">
+    <div class="px-6 py-4 bg-gray-50 border-b border-gray-200" data-testid="history-header">
       <h2 class="text-lg font-semibold text-gray-900">Reservation History</h2>
     </div>
     
     <% if @past_reservations.any? %>
-      <div class="overflow-hidden overflow-x-auto">
+      <div class="overflow-hidden overflow-x-auto" data-testid="past-reservation-list-table">
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
@@ -144,7 +144,7 @@
       
       <!-- Pagination (if implemented) -->
       <% if @past_reservations.total_pages > 1 %>
-        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200" data-testid="pagination">
           <nav class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between w-full">
             <div class="flex justify-center mt-4 sm:mt-0 w-full">
               <%= paginate @past_reservations %>
@@ -154,7 +154,7 @@
       <% end %>
       
     <% else %>
-      <div class="p-6 text-center">
+      <div class="p-6 text-center" data-testid="no-past-reservations">
         <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>

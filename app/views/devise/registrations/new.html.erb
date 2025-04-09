@@ -1,38 +1,37 @@
-<div class="flex items-center justify-center">
+<div class="flex items-center justify-center" data-testid="signup-page-container">
 
-  <div class="max-w-md mx-auto mt-10 p-8 bg-white rounded-2xl shadow-md border border-gray-200 m-2 min-w-[500px]">
-    <h2 class="text-2xl font-bold mb-6 text-center mt-2">Sign up</h2>
+  <div class="max-w-md mx-auto mt-10 p-8 bg-white rounded-2xl shadow-md border border-gray-200 m-2 min-w-[500px]" data-testid="signup-card">
+    <h2 class="text-2xl font-bold mb-6 text-center mt-2" data-testid="signup-title">Sign up</h2>
 
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-6" }) do |f| %>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-6", 'data-testid': "signup-form" }) do |f| %>
       
       <%= render "devise/shared/error_messages", resource: resource %>
 
-      <div>
-        <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+      <div data-testid="email-input-container">
+        <%= f.label :email, class: "block text-sm font-medium text-gray-700", 'data-testid': "email-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500", 'data-testid': "email-input" %>
       </div>
 
-      <div>
-        <%= f.label :password, class: "block text-sm font-medium text-gray-700" %>
+      <div data-testid="password-input-container">
+        <%= f.label :password, class: "block text-sm font-medium text-gray-700", 'data-testid': "password-label" %>
         <% if @minimum_password_length %>
-          <span class="text-xs text-gray-500">(<%= @minimum_password_length %> characters minimum)</span>
+          <span class="text-xs text-gray-500" data-testid="password-hint">(<%= @minimum_password_length %> characters minimum)</span>
         <% end %>
-        <%= f.password_field :password, autocomplete: "new-password", class: "mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+        <%= f.password_field :password, autocomplete: "new-password", class: "mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500", 'data-testid': "password-input" %>
       </div>
 
-      <div>
-        <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+      <div data-testid="password-confirmation-container">
+        <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700", 'data-testid': "password-confirmation-label" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500", 'data-testid': "password-confirmation-input" %>
       </div>
 
-      <div>
-        <%= f.submit "Sign up", class: "w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-200" %>
+      <div data-testid="signup-submit-container">
+        <%= f.submit "Sign up", class: "w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-200", 'data-testid': "signup-submit-button" %>
       </div>
 
-      
     <% end %>
 
-    <div class="mt-6 text-center text-sm text-gray-500">
+    <div class="mt-6 text-center text-sm text-gray-500" data-testid="signup-links">
       <%= render "devise/shared/links" %>
     </div>
   </div>

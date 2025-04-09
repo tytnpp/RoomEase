@@ -1,8 +1,8 @@
-<div class="w-full">
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+<div class="w-full" data-testid="rooms-page-container">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6" data-testid="rooms-header">
     <h1 class="text-2xl font-bold text-gray-800">Available Rooms</h1>
     
-    <div class="relative w-full sm:w-auto sm:min-w-[300px]">
+    <div class="relative w-full sm:w-auto sm:min-w-[300px]" data-testid="room-search-container">
       <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -22,9 +22,9 @@
     </div>
   </div>
   
-  <div id="rooms-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+  <div id="rooms-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6" data-testid="rooms-list">
     <% @rooms.each do |room| %>
-      <%= link_to room_path(room), class: "room-card block bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100", data: { name: room.name.downcase } do %>
+      <%= link_to room_path(room), class: "room-card block bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100", data: { name: room.name.downcase }, "data-testid": "room-card-#{index}" do %>
         
         <div class="p-5">
           <div class="flex justify-between items-start">
@@ -50,7 +50,7 @@
             <% end %>
           </div>
           
-          <div class="mt-4 flex justify-between items-center">
+          <div class="mt-4 flex justify-between items-center" data-testid="room-status">
             <span class="text-indigo-600 text-sm font-medium hover:underline">View details</span>
             <!-- Room Status -->
             <div class="flex items-center">
@@ -75,7 +75,7 @@
     <% end %>
   </div>
   
-  <div id="no-results" class="bg-white rounded-xl shadow p-8 text-center hidden">
+  <div id="no-results" class="bg-white rounded-xl shadow p-8 text-center hidden" data-testid="no-results">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
@@ -84,7 +84,7 @@
   </div>
   
   <% if @rooms.empty? %>
-    <div class="bg-white rounded-xl shadow p-8 text-center">
+    <div class="bg-white rounded-xl shadow p-8 text-center" data-testid="no-rooms">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
