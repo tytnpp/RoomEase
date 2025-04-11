@@ -48,7 +48,7 @@ class ReservationsController < ApplicationController
   def update
     @reservation = Reservation.find(params[:id])
     @room = @reservation.room
-  
+
     if overlapping_reservation?(@room, @reservation, reservation_params)
       flash.now[:alert] = "This time slot has already been reserved."
       render :edit, status: :unprocessable_entity
@@ -58,7 +58,7 @@ class ReservationsController < ApplicationController
       render :edit, status: :unprocessable_entity
     end
   end
-  
+
 
   private
 
@@ -91,7 +91,7 @@ class ReservationsController < ApplicationController
   def overlapping_reservation?(room, current_reservation, new_params)
     new_start = Time.zone.parse(new_params[:start_time])
     new_end   = Time.zone.parse(new_params[:end_time])
-  
+
     room.reservations
         .where.not(id: current_reservation.id) # ไม่เช็คตัวเอง
         .where("start_time < ? AND end_time > ?", new_end, new_start)
