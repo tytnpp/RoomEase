@@ -1,5 +1,5 @@
 class Room < ApplicationRecord
-    enum status: { available: 0, occupied: 1 }
+    enum status: { available: 0, occupied: 1 }, _prefix: true
 
     has_many :reservations, dependent: :destroy
     validates :name, presence: true

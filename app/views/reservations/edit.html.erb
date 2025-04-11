@@ -32,8 +32,13 @@
             <div data-testid="start-time">
                 <%= f.label :start_time, "Start Time", class: "block text-sm font-medium text-gray-900" %>
                 <div class="mt-1">
-                <%= f.select :start_time, 
-                        options_for_select((9..17).map { |hour| ["#{hour}:00", Time.zone.now.change(hour: hour, min: 0)] }),
+                    <% now = Time.zone.now.change(sec: 0, usec: 0) %>
+                    <% start_options = (9..17).map { |hour| Time.zone.now.change(hour: hour, min: 0, sec: 0, usec: 0) }
+                                            .select { |t| t >= now } %>
+                    <% selected_start_time = @reservation.start_time.change(sec: 0, usec: 0) %>
+
+                    <%= f.select :start_time, 
+                        options_for_select(start_options.map { |t| [t.strftime("%H:%M"), t] }, selected_start_time),
                         {}, 
                         { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" } %>
                 </div>
@@ -42,8 +47,12 @@
             <div data-testid="end-time">
                 <%= f.label :end_time, "End Time", class: "block text-sm font-medium text-gray-900" %>
                 <div class="mt-1">
-                <%= f.select :end_time, 
-                        options_for_select((10..18).map { |hour| ["#{hour}:00", Time.zone.now.change(hour: hour, min: 0)] }),
+                    <% end_options = (10..18).map { |hour| Time.zone.now.change(hour: hour, min: 0, sec: 0, usec: 0) }
+                      .select { |t| t >= now } %>
+                    <% selected_end_time = @reservation.end_time.change(sec: 0, usec: 0) %>
+
+                    <%= f.select :end_time, 
+                        options_for_select(end_options.map { |t| [t.strftime("%H:%M"), t] }, selected_end_time),
                         {}, 
                         { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" } %>
                 </div>
@@ -140,7 +149,7 @@
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("turbo:load", () => {
     const startTimeSelect = document.querySelector('select[name="reservation[start_time]"]');
     const endTimeSelect = document.querySelector('select[name="reservation[end_time]"]');
     
@@ -171,7 +180,7 @@
   });
 
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("turbo:load", () => {
     const startTimeSelect = document.querySelector('select[name="reservation[start_time]"]');
     const errorMessages = document.getElementById("errorMessages");
 

@@ -60,7 +60,7 @@
 
                 <% if current_time >= opening_time && current_time <= closing_time %>
                     <span class="px-2 py-1 text-xs font-medium rounded-full 
-                    <%= room.available? ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+                    <%= room.status_available? ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
                     <%= room.status.capitalize %>
                     </span>
                 <% else %>
@@ -96,7 +96,7 @@
 
 <!-- JavaScript for search functionality -->
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('turbo:load', function() {
     const searchInput = document.getElementById('room-search');
     const clearButton = document.getElementById('clear-search');
     const roomCards = document.querySelectorAll('.room-card');

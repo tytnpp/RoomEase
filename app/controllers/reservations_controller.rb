@@ -9,13 +9,17 @@ class ReservationsController < ApplicationController
   end
 
   def create
+    @room = Room.find(params[:room_id])
     @reservation = @room.reservations.build(reservation_params)
     @reservation.user = current_user
 
-    if @reservation.save
-      redirect_to rooms_path, notice: "Reservation created successfully."
+    if overlapping_reservation?(@room, @reservation)
+      flash.now[:alert] = "This time slot has already been reserved."
+      render :new, status: :unprocessable_entity
+    elsif @reservation.save
+      redirect_to activity_path, notice: "Reservation created successfully."
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -76,5 +80,12 @@ class ReservationsController < ApplicationController
                                      .order(end_time: :desc)
                                      .page(params[:page])
                                      .per(7)
+  end
+
+  def overlapping_reservation?(room, new_reservation)
+    room.reservations
+        .where.not(id: new_reservation.id)
+        .where("start_time < ? AND end_time > ?", new_reservation.end_time, new_reservation.start_time)
+        .exists?
   end
 end
