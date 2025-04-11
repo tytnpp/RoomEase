@@ -15,6 +15,15 @@
         <h1 class="text-xl font-semibold text-gray-900">Edit Reservation | <%= @reservation.room.name %></h1>
         </div>
 
+        <% if flash[:alert] %>
+            <div class="flex items-start p-4 mt-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg border border-red-200" role="alert" data-testid="reservation-error-message">
+                <svg class="flex-shrink-0 w-5 h-5 mr-2 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07" />
+                </svg>
+                <span><%= flash[:alert] %></span>
+            </div>
+        <% end %>
+
         <div class="p-6">
     
         <!-- Reservation Form -->

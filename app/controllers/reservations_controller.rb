@@ -13,11 +13,11 @@ class ReservationsController < ApplicationController
     @reservation = @room.reservations.build(reservation_params)
     @reservation.user = current_user
 
-    if overlapping_reservation?(@room, @reservation)
+    if overlapping_reservation?(@room, @reservation, reservation_params)
       flash.now[:alert] = "This time slot has already been reserved."
       render :new, status: :unprocessable_entity
     elsif @reservation.save
-      redirect_to activity_path, notice: "Reservation created successfully."
+      redirect_to rooms_path, notice: "Reservation created successfully."
     else
       render :new, status: :unprocessable_entity
     end
@@ -47,12 +47,18 @@ class ReservationsController < ApplicationController
 
   def update
     @reservation = Reservation.find(params[:id])
-    if @reservation.update(reservation_params)
+    @room = @reservation.room
+  
+    if overlapping_reservation?(@room, @reservation, reservation_params)
+      flash.now[:alert] = "This time slot has already been reserved."
+      render :edit, status: :unprocessable_entity
+    elsif @reservation.update(reservation_params)
       redirect_to activity_path, notice: "Reservation updated successfully."
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
+  
 
   private
 
@@ -82,10 +88,13 @@ class ReservationsController < ApplicationController
                                      .per(7)
   end
 
-  def overlapping_reservation?(room, new_reservation)
+  def overlapping_reservation?(room, current_reservation, new_params)
+    new_start = Time.zone.parse(new_params[:start_time])
+    new_end   = Time.zone.parse(new_params[:end_time])
+  
     room.reservations
-        .where.not(id: new_reservation.id)
-        .where("start_time < ? AND end_time > ?", new_reservation.end_time, new_reservation.start_time)
+        .where.not(id: current_reservation.id) # ไม่เช็คตัวเอง
+        .where("start_time < ? AND end_time > ?", new_end, new_start)
         .exists?
   end
 end
