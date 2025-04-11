@@ -55,36 +55,49 @@
         </div>
         <!-- Time Selection -->
         <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2" data-testid="reservation-time-selection">
-          <div data-testid="start-time">
-            <%= f.label :start_time, "Start Time", class: "block text-sm font-medium text-gray-900" %>
-            <div class="mt-1">
-              <% now = Time.zone.now.change(sec: 0) %>
-                <% start_options = (9..17).map { |hour| Time.zone.now.change(hour: hour, min: 0, sec: 0) }
-                                        .select { |t| t >= now && t <= Time.zone.now.change(hour: 18, min: 0) } %>
+            <div data-testid="start-time">
+                <%= f.label :start_time, "Start Time", class: "block text-sm font-medium text-gray-900" %>
+                <div class="mt-1">
+                <% now = Time.zone.now.change(sec: 0) %>
+                <% today = Time.zone.today %>
+                <% start_options = (9..17).map { |hour| Time.zone.local(today.year, today.month, today.day, hour, 0) }
+                                    .select { |t| t >= now } %>
 
-                <%= f.select :start_time, 
-                    options_for_select(start_options.map { |t| [t.strftime("%H:%M"), t] }),
-                    {}, 
-                    { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" } %>
+                <% if start_options.any? %>
+                    <%= f.select :start_time, 
+                        options_for_select(start_options.map { |t| [t.strftime("%H:%M"), t] }),
+                        {}, 
+                        { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" } %>
+                <% else %>
+                    <select disabled class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 text-gray-400 bg-gray-100 sm:text-sm rounded-md">
+                    <option selected>Closed for today</option>
+                    </select>
+                <% end %>
+                </div>
             </div>
-          </div>
 
-          <div data-testid="end-time">
-            <%= f.label :end_time, "End Time", class: "block text-sm font-medium text-gray-900" %>
-            <div class="mt-1">
-              <% now = Time.zone.now.change(sec: 0) %>
-                <% start_time_val = f.object.start_time || now %>
-                <% default_end_time = start_time_val + 1.hour %>
+            <div data-testid="end-time">
+                <%= f.label :end_time, "End Time", class: "block text-sm font-medium text-gray-900" %>
+                <div class="mt-1">
+                    <% now = Time.zone.now.change(sec: 0) %>
+                    <% start_time_val = f.object.start_time || now %>
+                    <% default_end_time = start_time_val + 1.hour %>
 
-                <% end_options = (10..18).map { |hour| Time.zone.now.change(hour: hour, min: 0, sec: 0) }
-                                        .select { |t| t >= now && t <= Time.zone.now.change(hour: 18, min: 0) } %>
+                    <% end_options = (start_time_val.hour + 1..18).map { |hour| Time.zone.local(start_time_val.year, start_time_val.month, start_time_val.day, hour, 0) }
+                                                .select { |t| t > start_time_val } %>
 
-                <%= f.select :end_time, 
-                    options_for_select(end_options.map { |t| [t.strftime("%H:%M"), t] }, default_end_time),
-                    {}, 
-                    { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" } %>
+                    <% if end_options.any? %>
+                    <%= f.select :end_time, 
+                        options_for_select(end_options.map { |t| [t.strftime("%H:%M"), t] }, default_end_time),
+                        {}, 
+                        { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" } %>
+                    <% else %>
+                    <select disabled class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 text-gray-400 bg-gray-100 sm:text-sm rounded-md">
+                        <option selected>No end time available</option>
+                    </select>
+                    <% end %>
+                </div>
             </div>
-          </div>
         </div>
 
         <!-- Terms and Conditions -->

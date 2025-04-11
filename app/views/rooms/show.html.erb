@@ -79,13 +79,18 @@
                         <%= slot[:start_time].strftime("%H:%M") %> - <%= slot[:end_time].strftime("%H:%M") %>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
-                        <% if slot[:available] %>
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            Available
+                        <% now = Time.zone.now %>
+                        <% if slot[:in_progress] %>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-600">
+                                In Use
+                            </span>
+                        <% elsif !slot[:available] %>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                Occupied
                             </span>
                         <% else %>
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                            Occupied
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                Available
                             </span>
                         <% end %>
                     </td>
