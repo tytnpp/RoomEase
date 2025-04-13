@@ -84,6 +84,10 @@
                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-600">
                                 In Use
                             </span>
+                        <% elsif slot[:closed] %>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-600">
+                                Closed
+                            </span>
                         <% elsif !slot[:available] %>
                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                 Occupied

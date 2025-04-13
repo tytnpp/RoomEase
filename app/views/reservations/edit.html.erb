@@ -38,46 +38,48 @@
             </div>
             <!-- Time Selection -->
             <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2" data-testid="time-selection">
-            <div data-testid="start-time">
-                <%= f.label :start_time, "Start Time", class: "block text-sm font-medium text-gray-900" %>
-                <div class="mt-1">
-                    <% now = Time.zone.now.change(sec: 0, usec: 0) %>
-                    <% start_options = (9..17).map { |hour| Time.zone.now.change(hour: hour, min: 0, sec: 0, usec: 0) }
+                <div data-testid="start-time-edit">
+                    <%= f.label :start_time, "Start Time", class: "block text-sm font-medium text-gray-900" %>
+                    <div class="mt-1">
+                        <% now = Time.zone.now.change(sec: 0) %>
+                        <% today = Time.zone.today %>
+                        <% start_options = (9..17).map { |hour| Time.zone.local(today.year, today.month, today.day, hour, 0) }
                                             .select { |t| t >= now } %>
-                    <% selected_start_time = @reservation.start_time.change(sec: 0, usec: 0) %>
 
-                    <%= f.select :start_time, 
-                        options_for_select(start_options.map { |t| [t.strftime("%H:%M"), t] }, selected_start_time),
-                        {}, 
-                        { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" } %>
+                        <% if start_options.any? %>
+                            <%= f.select :start_time, 
+                                options_for_select(start_options.map { |t| [t.strftime("%H:%M"), t] }),
+                                {}, 
+                                { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" } %>
+                        <% else %>
+                            <select disabled class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 text-gray-400 bg-gray-100 sm:text-sm rounded-md">
+                            <option selected>Closed</option>
+                            </select>
+                        <% end %>
+                    </div>
+                </div>
+
+                <div data-testid="end-time-edit">
+                    <%= f.label :end_time, "End Time", class: "block text-sm font-medium text-gray-900" %>
+                    <div class="mt-1">
+                        <% now = Time.zone.now.change(sec: 0) %>
+                        <% today = Time.zone.today %>
+                        <% end_options = (10..18).map { |hour| Time.zone.local(today.year, today.month, today.day, hour, 0) }
+                                            .select { |t| t >= now } %>
+
+                        <% if end_options.any? %>
+                            <%= f.select :end_time, 
+                                options_for_select(end_options.map { |t| [t.strftime("%H:%M"), t] }),
+                                {}, 
+                                { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" } %>
+                        <% else %>
+                            <select disabled class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 text-gray-400 bg-gray-100 sm:text-sm rounded-md">
+                            <option selected>Closed</option>
+                            </select>
+                        <% end %>
+                    </div>
                 </div>
             </div>
-
-            <div data-testid="end-time">
-                <%= f.label :end_time, "End Time", class: "block text-sm font-medium text-gray-900" %>
-                <div class="mt-1">
-                    <% end_options = (10..18).map { |hour| Time.zone.now.change(hour: hour, min: 0, sec: 0, usec: 0) }
-                      .select { |t| t >= now } %>
-                    <% selected_end_time = @reservation.end_time.change(sec: 0, usec: 0) %>
-
-                    <%= f.select :end_time, 
-                        options_for_select(end_options.map { |t| [t.strftime("%H:%M"), t] }, selected_end_time),
-                        {}, 
-                        { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" } %>
-                </div>
-            </div>
-            </div>
-
-            <!-- Notes (Optional) -->
-            <% if @reservation.respond_to?(:notes) %>
-            <div>
-                <%= f.label :notes, "Notes (Optional)", class: "block text-sm font-medium text-gray-700" %>
-                <div class="mt-1">
-                <%= f.text_area :notes, rows: 3, class: "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md", placeholder: "Add any special requirements or notes for this reservation" %>
-                </div>
-                <p class="mt-2 text-sm text-gray-500">Brief description of your meeting or any special requirements.</p>
-            </div>
-            <% end %>
 
             <!-- Terms and Conditions -->
             <div class="relative flex items-start" data-testid="terms-and-conditions">
@@ -91,9 +93,17 @@
             </div>
 
             <!-- Submit Button -->
-            <div class="flex justify-end" data-testid="submit-button">
-            <%= f.submit "Edit Reservation", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
-            </div>
+            <% if start_options.any? && end_options.any? %>
+                <div class="flex justify-end" data-testid="submit-butto-edit">
+                    <%= f.submit "Reserve Room", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+                </div>
+            <% else %>
+                <div class="flex justify-end" data-testid="submit-button-edit-closed">
+                    <button disabled class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md bg-gray-100 text-gray-400 cursor-not-allowed">
+                    Reserve Room
+                    </button>
+                </div>
+            <% end %>
         <% end %>
         </div>
     </div>

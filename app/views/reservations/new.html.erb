@@ -70,7 +70,7 @@
                         { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" } %>
                 <% else %>
                     <select disabled class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 text-gray-400 bg-gray-100 sm:text-sm rounded-md">
-                    <option selected>Closed for today</option>
+                    <option selected>Closed</option>
                     </select>
                 <% end %>
                 </div>
@@ -79,23 +79,21 @@
             <div data-testid="end-time">
                 <%= f.label :end_time, "End Time", class: "block text-sm font-medium text-gray-900" %>
                 <div class="mt-1">
-                    <% now = Time.zone.now.change(sec: 0) %>
-                    <% start_time_val = f.object.start_time || now %>
-                    <% default_end_time = start_time_val + 1.hour %>
+                <% now = Time.zone.now.change(sec: 0) %>
+                <% today = Time.zone.today %>
+                <% end_options = (10..18).map { |hour| Time.zone.local(today.year, today.month, today.day, hour, 0) }
+                                    .select { |t| t >= now } %>
 
-                    <% end_options = (start_time_val.hour + 1..18).map { |hour| Time.zone.local(start_time_val.year, start_time_val.month, start_time_val.day, hour, 0) }
-                                                .select { |t| t > start_time_val } %>
-
-                    <% if end_options.any? %>
+                <% if end_options.any? %>
                     <%= f.select :end_time, 
-                        options_for_select(end_options.map { |t| [t.strftime("%H:%M"), t] }, default_end_time),
+                        options_for_select(end_options.map { |t| [t.strftime("%H:%M"), t] }),
                         {}, 
                         { class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" } %>
-                    <% else %>
+                <% else %>
                     <select disabled class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 text-gray-400 bg-gray-100 sm:text-sm rounded-md">
-                        <option selected>No end time available</option>
+                    <option selected>Closed</option>
                     </select>
-                    <% end %>
+                <% end %>
                 </div>
             </div>
         </div>
@@ -112,9 +110,17 @@
         </div>
 
         <!-- Submit Button -->
-        <div class="flex justify-end" data-testid="submit-button">
-          <%= f.submit "Reserve Room", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
-        </div>
+        <% if start_options.any? && end_options.any? %>
+            <div class="flex justify-end" data-testid="submit-button">
+                <%= f.submit "Reserve Room", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+            </div>
+        <% else %>
+            <div class="flex justify-end" data-testid="submit-button">
+                <button disabled class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md bg-gray-100 text-gray-400 cursor-not-allowed">
+                Reserve Room
+                </button>
+            </div>
+        <% end %>
       <% end %>
     </div>
   </div>

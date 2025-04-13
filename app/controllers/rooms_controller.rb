@@ -9,6 +9,7 @@ class RoomsController < ApplicationController
     @room = Room.find(params[:id])
 
     # Define time slots (9 AM to 6 PM)
+    now = Time.zone.now
     start_time = Time.current.change(hour: 9, min: 0, sec: 0)
     end_time = Time.current.change(hour: 18, min: 0, sec: 0)
     @time_slots = []
@@ -29,11 +30,14 @@ class RoomsController < ApplicationController
                             .where("start_time = ? AND end_time = ?", start_time, slot_end_time)
                             .exists?
 
+      closed_today = now.hour >= 18 && start_time.to_date == now.to_date
+
       @time_slots << {
         start_time: start_time,
         end_time: slot_end_time,
         available: is_available,
-        in_progress: is_in_progress
+        in_progress: is_in_progress,
+        closed: closed_today
       }
 
       start_time = slot_end_time

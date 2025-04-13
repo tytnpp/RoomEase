@@ -110,7 +110,7 @@
           <span class="hidden sm:inline mx-2 text-2xl font-semibold text-indigo-600">RoomEase</span>
 
           <!-- Logo for Mobile -->
-          <%= link_to root_path do %>
+          <%= link_to rooms_path do %>
             <%= image_tag "roomease_logo.png", alt: "RoomEase Logo", class: "inline sm:hidden h-8 w-auto" %>
           <% end %>
         </div>
@@ -126,71 +126,53 @@
 
 <!-- JavaScript for Mobile Menu Toggle -->
 <script>
-  document.addEventListener('turbo:load', function() {
+  document.addEventListener('turbo:load', function () {
+  requestAnimationFrame(() => {
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebar-overlay');
     const menuOpenIcon = document.getElementById('menu-open-icon');
     const menuCloseIcon = document.getElementById('menu-close-icon');
-    
-    // Function to open sidebar
+
+    if (!mobileMenuButton || !sidebar || !overlay || !menuOpenIcon || !menuCloseIcon) return;
+
     function openSidebar() {
       sidebar.classList.remove('-translate-x-full');
       overlay.classList.remove('hidden');
       menuOpenIcon.classList.add('hidden');
       menuCloseIcon.classList.remove('hidden');
-      document.body.classList.add('overflow-hidden', 'lg:overflow-auto'); // Prevent scrolling on mobile
+      document.body.classList.add('overflow-hidden', 'lg:overflow-auto');
     }
-    
-    // Function to close sidebar
+
     function closeSidebar() {
       sidebar.classList.add('-translate-x-full');
       overlay.classList.add('hidden');
       menuOpenIcon.classList.remove('hidden');
       menuCloseIcon.classList.add('hidden');
-      document.body.classList.remove('overflow-hidden', 'lg:overflow-auto'); // Allow scrolling again
+      document.body.classList.remove('overflow-hidden', 'lg:overflow-auto');
     }
-    
-    // Toggle sidebar when hamburger button is clicked
-    if (mobileMenuButton) {
-      mobileMenuButton.addEventListener('click', function() {
-        if (sidebar.classList.contains('-translate-x-full')) {
-          openSidebar();
-        } else {
-          closeSidebar();
-        }
-      });
-    }
-    
-    // Close sidebar when overlay is clicked
-    if (overlay) {
-      overlay.addEventListener('click', closeSidebar);
-    }
-    
-    // Close sidebar when escape key is pressed
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        closeSidebar();
-      }
+
+    mobileMenuButton.addEventListener('click', () => {
+      sidebar.classList.contains('-translate-x-full') ? openSidebar() : closeSidebar();
     });
-    
-    // Close sidebar when window is resized to desktop size
-    window.addEventListener('resize', function() {
-      if (window.innerWidth >= 1024) { // lg breakpoint
-        closeSidebar();
-      }
+
+    overlay.addEventListener('click', closeSidebar);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeSidebar();
     });
-    
-    // Close sidebar when clicking on a link (for mobile)
+
     const sidebarLinks = sidebar.querySelectorAll('a');
     sidebarLinks.forEach(link => {
-      link.addEventListener('click', function() {
-        if (window.innerWidth < 1024) {
-          closeSidebar();
-        }
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 1024) closeSidebar();
       });
     });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024) closeSidebar();
+    });
   });
+});
 </script>
 
   <% else %>

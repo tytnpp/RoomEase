@@ -55,17 +55,24 @@
             <!-- Room Status -->
             <div class="flex items-center">
                 <% current_time = Time.zone.now %>
-                <% opening_time = Time.zone.parse("09:00") %>
-                <% closing_time = Time.zone.parse("18:00") %>
+                <% opening_time = current_time.change(hour: 9, min: 0) %>
+                <% closing_time = current_time.change(hour: 18, min: 0) %>
+
+                <% in_use = room.reservations.where("start_time <= ? AND end_time > ?", current_time, current_time).exists? %>
 
                 <% if current_time >= opening_time && current_time <= closing_time %>
-                    <span class="px-2 py-1 text-xs font-medium rounded-full 
-                    <%= room.status_available? ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
-                    <%= room.status.capitalize %>
-                    </span>
+                    <% if in_use %>
+                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-indigo-100 text-indigo-700">
+                        In Use
+                        </span>
+                    <% else %>
+                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                        Available
+                        </span>
+                    <% end %>
                 <% else %>
-                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
-                    Closed
+                    <span class="px-2 py-1 text-xs font-medium rounded-full bg-gray-200 text-gray-600">
+                        Closed
                     </span>
                 <% end %>
             </div>
@@ -102,6 +109,10 @@
     const roomCards = document.querySelectorAll('.room-card');
     const roomsContainer = document.getElementById('rooms-container');
     const noResults = document.getElementById('no-results');
+
+    if (!searchInput || !clearButton || !roomsContainer || !noResults || roomCards.length === 0) {
+    return;
+  }
     
     // Function to filter rooms
     function filterRooms() {
