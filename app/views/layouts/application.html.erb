@@ -15,7 +15,7 @@
     <!-- Sidebar -->
     <div class="flex h-screen bg-gray-50">
   <!-- Sidebar - Hidden by default on mobile with -translate-x-full -->
-  <div id="sidebar" class="fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-white border-r shadow-lg -translate-x-full lg:translate-x-0 lg:static lg:inset-0">
+  <div id="sidebar" data-turbo-permanent class="fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto transition duration-300 transform bg-white border-r shadow-lg -translate-x-full lg:translate-x-0 lg:static lg:inset-0">
     <div class="flex items-center justify-center mt-8">
       <div class="flex items-center" data-testid="sidebar-logo">
         <%= link_to rooms_path do %>
@@ -127,7 +127,6 @@
 <!-- JavaScript for Mobile Menu Toggle -->
 <script>
   document.addEventListener('turbo:load', function () {
-  requestAnimationFrame(() => {
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebar-overlay');
@@ -172,7 +171,6 @@
       if (window.innerWidth >= 1024) closeSidebar();
     });
   });
-});
 </script>
 
   <% else %>
